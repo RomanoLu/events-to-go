@@ -1,0 +1,2 @@
+# Events-to-Go
+Ein Service zum Erstellen von Events (z.B Fußball spielen am Samstag, Geburtstagsfeier von Tim, Party am Campus, usw.). Jeder Nutzer kann sowohl Organisator als auch Teilnehmer sein. Ein Organisator erstellt ein Event. Ein Event findet an einer Location statt. Ein Organisator kann zudem seine eigenen Events updaten und löschen. Teilnehmer können einem Event zusagen. Teilnehmer können jedem Event zusagen.    
