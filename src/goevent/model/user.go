@@ -1,8 +1,10 @@
 package model
 
-type User struct{
+import "gorm.io/gorm"
 
-	UserID   uint `gorm:"primaryKey"`
+type User struct{
+	gorm.Model
+	UserID   uint 
 	Name 	string `gorm:"notNull;size:20"`
 	Email 	string `gorm:"notNull;size:20"`
 	Passwort 	string `gorm:"notNull;size:20"`

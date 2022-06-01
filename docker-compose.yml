@@ -1,6 +1,6 @@
 services:
-  myaktion:
-    build: ./src/myaktion
+  goevent:
+    build: ./src/goevent
     ports:
       - "8000:8000"
     environment:
@@ -10,4 +10,4 @@ services:
     image: mariadb:10.5
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=myaktion
+      - MYSQL_DATABASE=goevent

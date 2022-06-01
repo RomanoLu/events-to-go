@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/RomanoLu/events-to-go/src/goevent/db"
+	"github.com/RomanoLu/events-to-go/src/goevent/handler"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
@@ -11,7 +12,8 @@ import (
 func main() {
 	log.Println("Starting My-Aktion API server")
 	router := mux.NewRouter()
-	//router.HandleFunc("/campaign", ).Methods("POST")
+	router.HandleFunc("/addevent", handler.AddEvent).Methods("POST")	
+	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")
 	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal(err)
 	}
