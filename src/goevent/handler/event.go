@@ -12,20 +12,14 @@ import (
 )
 
 func AddEvent(w http.ResponseWriter, r *http.Request) {
-	id, err := getId(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
 	event, err := getEvent(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = service.AddEvent(event)
-	if err != nil {
-		log.Errorf("Failure adding event with ID %v: %v", id, err)
-		http.Error(w, err.Error(), http.StatusNotFound)
+	if err := service.AddEvent(event); err != nil {
+		log.Errorf("Error calling service CreateCampaign: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	sendJson(w, event)

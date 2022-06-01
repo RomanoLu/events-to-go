@@ -21,8 +21,16 @@ func Init() {
 		panic("failed to connect to database")
 	}
 	log.Info("Starting automatic migrations")
-	
+	if err := DB.Debug().AutoMigrate(&model.Location{}); err != nil {
+		panic(err)
+	}
+	if err := DB.Debug().AutoMigrate(&model.User{}); err != nil {
+		panic(err)
+	}
 	if err := DB.Debug().AutoMigrate(&model.Event{}); err != nil {
+		panic(err)
+	}
+	if err := DB.Debug().AutoMigrate(&model.Invetation{}); err != nil {
 		panic(err)
 	}
 	log.Info("Automatic migrations finished")
