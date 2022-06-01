@@ -22,7 +22,7 @@ func Init() {
 	}
 	log.Info("Starting automatic migrations")
 	if err := DB.Debug().AutoMigrate(&model.Location{}); err != nil {
-		panic("Hier")
+		panic(err)
 	}
 	if err := DB.Debug().AutoMigrate(&model.Invetation{}); err != nil {
 		panic(err)

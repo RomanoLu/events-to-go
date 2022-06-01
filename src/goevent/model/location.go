@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Location struct {
 	gorm.Model
-	LocationID  uint   	`gorm:"primaryKey"`
+	LocationID  uint   	
 	Name        string  `gorm:"notNull;size:20"`
 	Postcode    string  `gorm:"notNull;size:7"`
 	City        string  `gorm:"notNull;size:20"`
