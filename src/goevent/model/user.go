@@ -1,9 +1,7 @@
 package model
 
-import "gorm.io/gorm"
 
 type User struct{
-	gorm.Model
 	UserID   uint 
 	Name 	string `gorm:"notNull;size:20"`
 	Email 	string `gorm:"notNull;size:20"`
