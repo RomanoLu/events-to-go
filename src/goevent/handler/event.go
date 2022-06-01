@@ -26,13 +26,13 @@ func AddEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllEvents(w http.ResponseWriter, _ *http.Request)  {
-	var events []model.Event
-	result := db.DB.Preload("User").Find(&events)
-	if result.Error != nil {
+	event, err := service.GetAllEvents()
+	if err != nil {
+		log.Errorf("Error calling service GetCampaigns: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	log.Tracef("Retrieved: %v", events)
-	sendJson(w, events)
+	sendJson(w, event)
 }
 
 func GetEventById(id uint) (*model.Event, error) {

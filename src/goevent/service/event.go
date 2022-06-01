@@ -15,3 +15,13 @@ func AddEvent(event *model.Event) error {
 	log.Tracef("Stored: %v", event)
 	return nil
 }
+
+func GetAllEvents() ([]model.Event, error){
+	var events []model.Event
+	result := db.DB.Find(&events)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	log.Tracef("Retrieved: %v", events)
+	return events, nil
+}
