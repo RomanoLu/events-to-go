@@ -12,8 +12,11 @@ import (
 func main() {
 	log.Println("Starting My-Aktion API server")
 	router := mux.NewRouter()
-	router.HandleFunc("/addevent", handler.AddEvent).Methods("POST")	
-	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")
+	router.HandleFunc("/event", handler.CreateEvent).Methods("POST")	
+	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")	
+	router.HandleFunc("/event/{id}",handler.GetEventById).Methods("GET")
+	router.HandleFunc("/event/{id}",handler.UpdateEvent).Methods("UPDATE")
+	router.HandleFunc("/event/{id}",handler.DeleteEvent).Methods("DELETE")
 	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal(err)
 	}
