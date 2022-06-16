@@ -23,7 +23,7 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 	sendJson(w, event)
 }
 
-func GetAllEvents(w http.ResponseWriter, _ *http.Request)  {
+func GetAllEvents(w http.ResponseWriter, _ *http.Request) {
 	event, err := service.GetAllEvents()
 	if err != nil {
 		log.Errorf("Error calling service GetAllEvents: %v", err)
@@ -33,7 +33,7 @@ func GetAllEvents(w http.ResponseWriter, _ *http.Request)  {
 	sendJson(w, event)
 }
 
-func GetEventById(w http.ResponseWriter, r *http.Request)  {
+func GetEventById(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
 	log.Trace("Die id ist: %v", id)
 	if err != nil {
@@ -53,7 +53,7 @@ func GetEventById(w http.ResponseWriter, r *http.Request)  {
 	sendJson(w, event)
 }
 
-func GetEventByLocation(w http.ResponseWriter, r *http.Request)  {
+func GetEventsNearby(w http.ResponseWriter, r *http.Request) {
 	long, lat, err := getGeodata(r)
 	log.Trace("Die Location id ist: %v ; %v", long, lat)
 	if err != nil {
@@ -62,22 +62,22 @@ func GetEventByLocation(w http.ResponseWriter, r *http.Request)  {
 	}
 	event, err := service.GetEventByLocation(long, lat)
 	if err != nil {
-		log.Errorf("Failure retrieving Longitude %v and latitude %v",  long, lat, err)
+		log.Errorf("Failure retrieving Longitude %v and latitude %v", long, lat, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if event == nil {
-		http.Error(w, "404 event not found", http.StatusNotFound)
+		http.Error(w, "Leider gibt es keine Events in deiner Nähe", http.StatusNotFound)
 		return
 	}
 	sendJson(w, event)
 }
 
-func GetEventByDate(w http.ResponseWriter, _ *http.Request)  {
-	
+func GetEventByDate(w http.ResponseWriter, _ *http.Request) {
+
 }
 
-func UpdateEvent(w http.ResponseWriter, r *http.Request)  {
+func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -99,9 +99,9 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 	sendJson(w, event)
-	
+
 }
-func DeleteEvent(w http.ResponseWriter, r *http.Request)  {
+func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -118,6 +118,24 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 	sendJson(w, result{Success: "OK"})
+}
+
+func InvideUser(w http.ResponseWriter, r *http.Request) {
+
+	/* Hier muss jetzt noch die Invetation dem User zugeordnet werden.
+	Dafür kann die unten erstellte invetation einfach dem user mit der oben stehenden UserID hinzhugefügt wederden
+	Dafür muss dann eine service methode geschrieben werden die das macht
+	+ noch irgendwas überlegen wie man ein event besser einer invetation zuordnen kann
+	*/
+	eventID, _, message, _ := getIds(r)
+
+	invetation := model.Invetation{
+		Message:  message,
+		Accepted: false,
+		Eventid:  eventID,
+	}
+
+	sendJson(w, invetation)
 }
 
 func getEvent(r *http.Request) (*model.Event, error) {

@@ -33,7 +33,7 @@ func getId(r *http.Request) (uint, error) {
 }
 
 func getGeodata(r *http.Request) (float64,float64, error) {
-	//query?longitude=,latitude=
+
 	vars := mux.Vars(r)
 	long, err := strconv.ParseFloat(vars["longitude"], 64)
 	if err != nil {
@@ -47,4 +47,27 @@ func getGeodata(r *http.Request) (float64,float64, error) {
 	}
 	log.Infoln("Recived %v as Longitude and %v as Latitude",long, lat)
 	return long, lat, nil
+}
+
+func getIds(r *http.Request) (uint,uint, string, error) {
+	var message string
+	err := json.NewDecoder(r.Body).Decode(&message)
+	if err != nil {
+		log.Errorf("Can't serialize request body to event struct: %v", err)
+		return 0,0,"",err
+	}
+	vars := mux.Vars(r)
+	eventid, err := strconv.ParseUint(vars["eventid"], 10, 0)
+	if err != nil {
+		log.Errorf("Can't get ID from request: %v", err)
+		return 0,0,"",err
+	}
+	
+	userid, err := strconv.ParseUint(vars["userid"], 10, 0)
+	if err != nil {
+		log.Errorf("Can't get ID from request: %v", err)
+		return 0,0,"",err
+	}
+	log.Infoln("Recived %v as eventid and %v as userid",eventid, userid)
+	return uint(eventid), uint(userid),message, nil
 }
