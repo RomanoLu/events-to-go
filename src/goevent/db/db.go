@@ -30,8 +30,5 @@ func Init() {
 	if err := DB.Debug().AutoMigrate(&model.Event{}); err != nil {
 		panic(err)
 	}
-	if err := DB.Debug().AutoMigrate(&model.Invetation{}); err != nil {
-		panic(err)
-	}
 	log.Info("Automatic migrations finished")
 }

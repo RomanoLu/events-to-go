@@ -12,11 +12,22 @@ import (
 func main() {
 	log.Println("Starting My-Aktion API server")
 	router := mux.NewRouter()
-	router.HandleFunc("/event", handler.CreateEvent).Methods("POST")	
-	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")	
-	router.HandleFunc("/event/{id}",handler.GetEventById).Methods("GET")
-	router.HandleFunc("/event/{id}",handler.UpdateEvent).Methods("UPDATE")
-	router.HandleFunc("/event/{id}",handler.DeleteEvent).Methods("DELETE")
+	router.HandleFunc("/event", handler.CreateEvent).Methods("POST")
+	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")
+	router.HandleFunc("/event/{id}", handler.GetEventById).Methods("GET")
+	router.HandleFunc("/event/{longitude}/{latitude}", handler.GetEventByLocation).Methods("GET")
+	router.HandleFunc("/event/{id}", handler.UpdateEvent).Methods("UPDATE")
+	router.HandleFunc("/event/{id}", handler.DeleteEvent).Methods("DELETE")	
+	router.HandleFunc("/location", handler.GetLocations).Methods("GET")
+	//router.HandleFunc("/location",handler.CreateLocation).Methods("POST")
+	//router.HandleFunc("/user/",handler.CreateUser).Methods("POST")
+	//router.HandleFunc("/event/{userid}",handler.AddUserToEvent).Methods("POST")
+	//router.HandleFunc("/event/{location}",handler.DeleteEvent).Methods("DELETE")
+	//router.HandleFunc("/event/{Date}",handler.DeleteEvent).Methods("DELETE")
+	//router.HandleFunc("/acceptEvent/{userid}",handler.AcceptEvent).Methods("POST")
+	//router.HandleFunc("/invetation/",handler.CreateInvetation).Methods("POST")
+	//router.HandleFunc("/invetations/{userid}",handler.GetInvetation).Methods("GET")
+
 	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal(err)
 	}

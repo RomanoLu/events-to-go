@@ -1,11 +1,12 @@
 package model
 
-import "gorm.io/gorm"
-
+import (
+	"gorm.io/gorm"
+)
 
 type Location struct {
 	gorm.Model
-	LocationID  uint   	
+	LocationID  uint
 	Name        string  `gorm:"notNull;size:20"`
 	Postcode    string  `gorm:"notNull;size:7"`
 	City        string  `gorm:"notNull;size:20"`
@@ -13,5 +14,4 @@ type Location struct {
 	MaxCapacity uint    `gorm:"notNull;check: max_capacity>=1"`
 	Latitude    float64 `gorm:"notNull"`
 	Longitude   float64 `gorm:"notNull"`
-
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+
 	"github.com/RomanoLu/events-to-go/src/goevent/model"
 	"github.com/RomanoLu/events-to-go/src/goevent/service"
 	log "github.com/sirupsen/logrus"
@@ -52,8 +53,24 @@ func GetEventById(w http.ResponseWriter, r *http.Request)  {
 	sendJson(w, event)
 }
 
-func GetEventByLocation(w http.ResponseWriter, _ *http.Request)  {
-	
+func GetEventByLocation(w http.ResponseWriter, r *http.Request)  {
+	long, lat, err := getGeodata(r)
+	log.Trace("Die Location id ist: %v ; %v", long, lat)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	event, err := service.GetEventByLocation(long, lat)
+	if err != nil {
+		log.Errorf("Failure retrieving Longitude %v and latitude %v",  long, lat, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if event == nil {
+		http.Error(w, "404 event not found", http.StatusNotFound)
+		return
+	}
+	sendJson(w, event)
 }
 
 func GetEventByDate(w http.ResponseWriter, _ *http.Request)  {

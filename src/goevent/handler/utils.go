@@ -32,4 +32,19 @@ func getId(r *http.Request) (uint, error) {
 	return uint(id), nil
 }
 
-
+func getGeodata(r *http.Request) (float64,float64, error) {
+	//query?longitude=,latitude=
+	vars := mux.Vars(r)
+	long, err := strconv.ParseFloat(vars["longitude"], 64)
+	if err != nil {
+		log.Errorf("Can't get Longitude from request: %v", err)
+		return 0, 0, err
+	}
+	lat, err := strconv.ParseFloat(vars["latitude"], 64)
+	if err != nil {
+		log.Errorf("Can't get Latitude from request: %v", err)
+		return 0,0, err
+	}
+	log.Infoln("Recived %v as Longitude and %v as Latitude",long, lat)
+	return long, lat, nil
+}
