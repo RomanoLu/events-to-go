@@ -90,15 +90,16 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	event, err = service.UpdateEvent(id, event)
 	if err != nil {
-		log.Errorf("Failure updating event with ID %v: %v", id, err)
+		log.Errorf("Failure updating campaign with ID %v: %v", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if event == nil {
-		http.Error(w, "404 event not found", http.StatusNotFound)
+		http.Error(w, "404 campaign not found", http.StatusNotFound)
 		return
 	}
 	sendJson(w, event)
+
 
 }
 func DeleteEvent(w http.ResponseWriter, r *http.Request) {
@@ -121,21 +122,11 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func InvideUser(w http.ResponseWriter, r *http.Request) {
+	_, userid, invetation, _ := getIds(r)
 
-	/* Hier muss jetzt noch die Invetation dem User zugeordnet werden.
-	Dafür kann die unten erstellte invetation einfach dem user mit der oben stehenden UserID hinzhugefügt wederden
-	Dafür muss dann eine service methode geschrieben werden die das macht
-	+ noch irgendwas überlegen wie man ein event besser einer invetation zuordnen kann
-	*/
-	eventID, _, message, _ := getIds(r)
+	user, _ :=service.CreateInvetation(userid, invetation)
 
-	invetation := model.Invetation{
-		Message:  message,
-		Accepted: false,
-		Eventid:  eventID,
-	}
-
-	sendJson(w, invetation)
+	sendJson(w, user)
 }
 
 func getEvent(r *http.Request) (*model.Event, error) {

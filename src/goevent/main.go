@@ -12,6 +12,8 @@ import (
 func main() {
 	log.Println("Starting My-Aktion API server")
 	router := mux.NewRouter()
+
+	//Event Requests
 	router.HandleFunc("/event", handler.CreateEvent).Methods("POST")
 	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")
 	router.HandleFunc("/event/{id}", handler.GetEventById).Methods("GET")
@@ -20,9 +22,18 @@ func main() {
 	router.HandleFunc("/event/{id}", handler.DeleteEvent).Methods("DELETE")	
 	router.HandleFunc("/event/invide/{eventid}/{userid}", handler.InvideUser).Methods("POST")
 	router.HandleFunc("/location", handler.GetLocations).Methods("GET")
+
+	//User requests	
+	router.HandleFunc("/user",handler.GetAllUsers).Methods("GET")
+	router.HandleFunc("/user",handler.CreateUser).Methods("POST")
+	router.HandleFunc("/user/{id}",handler.GetUserById).Methods("GET")
+	router.HandleFunc("/user/invetation/{id}",handler.GetInvetations).Methods("GET")
+
+
+
+
+	
 	//router.HandleFunc("/location",handler.CreateLocation).Methods("POST")
-	router.HandleFunc("/user/",handler.CreateUser).Methods("POST")
-	router.HandleFunc("/user/{id}",handler.GetInvetations).Methods("GET")
 	//router.HandleFunc("/event/{userid}",handler.AddUserToEvent).Methods("POST")
 	//router.HandleFunc("/event/{location}",handler.DeleteEvent).Methods("DELETE")
 	//router.HandleFunc("/event/{Date}",handler.DeleteEvent).Methods("DELETE")

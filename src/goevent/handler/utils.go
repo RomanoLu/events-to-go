@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/RomanoLu/events-to-go/src/goevent/model"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
@@ -49,25 +51,26 @@ func getGeodata(r *http.Request) (float64,float64, error) {
 	return long, lat, nil
 }
 
-func getIds(r *http.Request) (uint,uint, string, error) {
-	var message string
-	err := json.NewDecoder(r.Body).Decode(&message)
+func getIds(r *http.Request) (uint,uint, model.Invetation, error) {
+	var invetation model.Invetation
+	err := json.NewDecoder(r.Body).Decode(&invetation)
 	if err != nil {
 		log.Errorf("Can't serialize request body to event struct: %v", err)
-		return 0,0,"",err
+		return 0,0,invetation ,err
 	}
+	log.Info("Invetation message: %v", invetation.Message)
 	vars := mux.Vars(r)
 	eventid, err := strconv.ParseUint(vars["eventid"], 10, 0)
 	if err != nil {
 		log.Errorf("Can't get ID from request: %v", err)
-		return 0,0,"",err
+		return 0,0,invetation,err
 	}
 	
 	userid, err := strconv.ParseUint(vars["userid"], 10, 0)
 	if err != nil {
 		log.Errorf("Can't get ID from request: %v", err)
-		return 0,0,"",err
+		return 0,0,invetation,err
 	}
 	log.Infoln("Recived %v as eventid and %v as userid",eventid, userid)
-	return uint(eventid), uint(userid),message, nil
+	return uint(eventid), uint(userid),invetation, nil
 }

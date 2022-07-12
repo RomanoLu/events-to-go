@@ -72,15 +72,29 @@ func GetEventByDate(date time.Time) (*model.Event, error) {
 }
 
 func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
-	existingevent, err := GetEventById(id)
-	if err != nil {
-		return existingevent, err
+	existingEvent, err := GetEventById(id)
+	if existingEvent == nil || err != nil {
+		return existingEvent, err
 	}
-	db.DB.Model(&existingevent).Updates(event)
+	existingEvent.Begin = event.Begin
+	existingEvent.Description = event.Description
+	existingEvent.End = event.End
+	existingEvent.Titel = event.Titel
+	existingEvent.MaxNumberOfParticipants = event.MaxNumberOfParticipants
+	existingEvent.Participants = event.Participants
+	existingEvent.LocationID = event.LocationID
+	existingEvent.Type = event.Type
+	existingEvent.Host = event.Host
+
+	result := db.DB.Save(existingEvent)
+	if result.Error != nil {
+		return nil, result.Error
+	}
 	entry := log.WithField("ID", id)
 	entry.Info("Successfully updated event.")
-	entry.Tracef("Updated: %v", event)
-	return existingevent, nil
+	entry.Tracef("Updated: %v", existingEvent)
+	return existingEvent, nil
+
 }
 
 func DeleteEvent(id uint) (*model.Event, error) {
