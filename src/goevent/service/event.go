@@ -21,7 +21,7 @@ func CreateEvent(event *model.Event) error {
 
 func GetAllEvents() ([]model.Event, error) {
 	var events []model.Event
-	result := db.DB.Find(&events)
+	result := db.DB.Preload("Participants").Preload("LocationID").Find(&events)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -31,7 +31,16 @@ func GetAllEvents() ([]model.Event, error) {
 
 func GetEventById(id uint) (*model.Event, error) {
 	var event *model.Event
-	result := db.DB.Find(&event, id)
+	result := db.DB.Preload("Participants").Preload("LocationID").Find(&event, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	log.Tracef("Retrieved: %v", event)
+	return event, nil
+}
+func GetParticipants(id uint) (*model.Event, error){
+	var event *model.Event
+	result := db.DB.Preload("Participants").Preload("LocationID").Find(&event, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -67,9 +76,6 @@ func getLocationByEvent(event model.Event) (*model.Location, error) {
 	return location, nil
 }
 
-func GetEventByDate(date time.Time) (*model.Event, error) {
-	return nil, nil
-}
 
 func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
 	existingEvent, err := GetEventById(id)
@@ -79,9 +85,9 @@ func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
 	existingEvent.Begin = event.Begin
 	existingEvent.Description = event.Description
 	existingEvent.End = event.End
-	existingEvent.Titel = event.Titel
+	existingEvent.Titel = "Update geht durch"
 	existingEvent.MaxNumberOfParticipants = event.MaxNumberOfParticipants
-	existingEvent.Participants = event.Participants
+	existingEvent.Participants = append(existingEvent.Participants, event.Participants...)
 	existingEvent.LocationID = event.LocationID
 	existingEvent.Type = event.Type
 	existingEvent.Host = event.Host
@@ -91,8 +97,7 @@ func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
 		return nil, result.Error
 	}
 	entry := log.WithField("ID", id)
-	entry.Info("Successfully updated event.")
-	entry.Tracef("Updated: %v", existingEvent)
+	entry.Info("Successfully updated event: %v", existingEvent)
 	return existingEvent, nil
 
 }
@@ -138,4 +143,64 @@ func distance(lat1 float64, lng1 float64, lat2 float64, lng2 float64, unit ...st
 	}
 
 	return dist
+}
+
+func AddParticipants(eventid uint, user *model.User)(*model.Event, error) {
+	event, err := GetEventById(eventid)
+	if err != nil {
+		log.Error("This User do not have a Invetation")
+		return event, err
+	}
+	event.Participants = append(event.Participants, *user)
+	//log.Info("Das ist das Event zu welchem der Nutzer hinzugefügt wird: %v", event)
+	UpdateEvent(event.ID, event)
+	return event, nil
+}
+
+func GetEventByDate(date time.Time) ([]model.Event, error) {
+	var event []model.Event
+	result := db.DB.Preload("Participants").Preload("LocationID").Where("begin BETWEEN ? AND ?", date, date.AddDate(0,0,1)).Find(&event)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	log.Tracef("Retrieved: %v", event)
+	return event, nil
+}
+
+func GetNextWeekendEvents(date time.Time) ([]model.Event, error) {
+	var event []model.Event
+	result := db.DB.Preload("Participants").Preload("LocationID").Where("begin BETWEEN ? AND ?", date, date.AddDate(0,0,7)).Find(&event)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	var weekendevent []model.Event
+	for _, e := range event {
+		if(isWeekend(e.Begin)){
+			weekendevent = append(weekendevent, e)
+		}
+	}
+	log.Tracef("Retrieved: %v", event)
+	return weekendevent, nil
+}
+
+func isWeekend(t time.Time) bool {
+    t = t.UTC()
+    switch t.Weekday() {
+    case time.Friday:
+        h, _, _ := t.Clock()
+        if h >= 12+10 {
+            return true
+        }
+    case time.Saturday:
+        return true
+    case time.Sunday:
+        h, m, _ := t.Clock()
+        if h < 12+10 {
+            return true
+        }
+        if h == 12+10 && m <= 5 {
+            return true
+        }
+    }
+    return false
 }

@@ -34,8 +34,24 @@ func getId(r *http.Request) (uint, error) {
 	return uint(id), nil
 }
 
-func getGeodata(r *http.Request) (float64,float64, error) {
+func getEventIdAndUserId(r *http.Request) (uint,uint, error) {
+	vars := mux.Vars(r)
+	eventid, err := strconv.ParseUint(vars["eventid"], 10, 0)
+	if err != nil {
+		log.Errorf("Can't get ID from request: %v", err)
+		return 0, 0, err
+	}
+	fmt.Println(eventid)
+	userid, err := strconv.ParseUint(vars["userid"], 10, 0)
+	if err != nil {
+		log.Errorf("Can't get ID from request: %v", err)
+		return 0, 0, err
+	}
+	fmt.Println(userid)
+	return uint(eventid),uint(userid), nil
+}
 
+func getGeodata(r *http.Request) (float64,float64, error) {
 	vars := mux.Vars(r)
 	long, err := strconv.ParseFloat(vars["longitude"], 64)
 	if err != nil {

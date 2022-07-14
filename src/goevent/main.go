@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	log.Println("Starting My-Aktion API server")
+	log.Println("Starting Events-to-go API server")
 	router := mux.NewRouter()
 
 	//Event Requests
@@ -18,28 +18,26 @@ func main() {
 	router.HandleFunc("/event", handler.GetAllEvents).Methods("GET")
 	router.HandleFunc("/event/{id}", handler.GetEventById).Methods("GET")
 	router.HandleFunc("/event/{longitude}/{latitude}", handler.GetEventsNearby).Methods("GET")
+	router.HandleFunc("/eventsoftoday", handler.GetEventByDate).Methods("GET")
+	router.HandleFunc("/eventsofweekend", handler.GetNextWeekendEvents).Methods("GET")
 	router.HandleFunc("/event/{id}", handler.UpdateEvent).Methods("UPDATE")
 	router.HandleFunc("/event/{id}", handler.DeleteEvent).Methods("DELETE")	
 	router.HandleFunc("/event/invide", handler.CreateInventation).Methods("POST")
 	router.HandleFunc("/location", handler.GetLocations).Methods("GET")
+	router.HandleFunc("/adduser/{eventid}/{userid}",handler.AddParticipants).Methods("POST")
 
 	//User requests	
 	router.HandleFunc("/user",handler.GetAllUsers).Methods("GET")
 	router.HandleFunc("/user",handler.CreateUser).Methods("POST")
 	router.HandleFunc("/user/{id}",handler.GetUserById).Methods("GET")
 	router.HandleFunc("/user/invetation/{id}",handler.GetInvetations).Methods("GET")
-
-
-
-
+	router.HandleFunc("/acceptinvetation/{id}",handler.AcceptInvetation).Methods("POST")
+	router.HandleFunc("/participants/{id}",handler.GetParticipants).Methods("POST")
+	//Save Event in Calender
 	
-	//router.HandleFunc("/location",handler.CreateLocation).Methods("POST")
-	//router.HandleFunc("/event/{userid}",handler.AddUserToEvent).Methods("POST")
 	//router.HandleFunc("/event/{location}",handler.DeleteEvent).Methods("DELETE")
 	//router.HandleFunc("/event/{Date}",handler.DeleteEvent).Methods("DELETE")
-	//router.HandleFunc("/acceptEvent/{userid}",handler.AcceptEvent).Methods("POST")
-	//router.HandleFunc("/invetation/",handler.CreateInvetation).Methods("POST")
-	//router.HandleFunc("/invetations/{userid}",handler.GetInvetation).Methods("GET")
+
 
 	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal(err)

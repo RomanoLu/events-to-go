@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/RomanoLu/events-to-go/src/goevent/model"
 	"github.com/RomanoLu/events-to-go/src/goevent/service"
@@ -53,6 +54,41 @@ func GetEventById(w http.ResponseWriter, r *http.Request) {
 	sendJson(w, event)
 }
 
+func GetParticipants(w http.ResponseWriter, r *http.Request){
+	id, err := getId(r)
+	log.Trace("Die id ist: %v", id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	participants, err := service.GetParticipants(id)
+	if err != nil {
+		log.Errorf("Failure retrieving Participants from event with ID %v: %v", id, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var  user []model.User= participants.Participants 
+	log.Info("Recieved Participants: %v", user)
+	sendJson(w, user)
+}
+func AddParticipants(w http.ResponseWriter, r *http.Request){
+	eventid, userid, err := getEventIdAndUserId(r)
+	log.Trace("Die id ist: %v & %v", eventid, userid)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	
+	user, err := service.GetUserById(userid)
+	log.Info("Dieser User sollte hinzugefügt werden: %v", user)
+	event, err := service.AddParticipants(eventid, user)
+	if err != nil {
+		log.Error("Error trying to add Participant")
+		return
+	}
+	sendJson(w, event)
+}
+
 func GetEventsNearby(w http.ResponseWriter, r *http.Request) {
 	long, lat, err := getGeodata(r)
 	log.Trace("Die Location id ist: %v ; %v", long, lat)
@@ -71,10 +107,6 @@ func GetEventsNearby(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	sendJson(w, event)
-}
-
-func GetEventByDate(w http.ResponseWriter, _ *http.Request) {
-
 }
 
 func UpdateEvent(w http.ResponseWriter, r *http.Request) {
@@ -102,6 +134,8 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 
 
 }
+
+
 func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
 	if err != nil {
@@ -137,4 +171,28 @@ func getEvent(r *http.Request) (*model.Event, error) {
 		return nil, err
 	}
 	return &event, nil
+}
+
+
+func GetEventByDate(w http.ResponseWriter, _ *http.Request) {
+	currentTime := time.Now()
+	events, err := service.GetEventByDate(currentTime)
+	if err != nil {
+		log.Errorf("Failure deleting event with ID %v: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	sendJson(w, events)
+}
+
+
+func GetNextWeekendEvents(w http.ResponseWriter, _ *http.Request){
+	currentTime := time.Now()
+	events, err := service.GetNextWeekendEvents(currentTime)
+	if err != nil {
+		log.Errorf("Failure deleting event with ID %v: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	sendJson(w, events)
 }

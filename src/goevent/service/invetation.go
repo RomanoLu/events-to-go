@@ -30,3 +30,45 @@ func GetInvetationByUserID(userid uint) ([]model.Invetation, error) {
 	return invetations, nil
 
 }
+func GetInvetationById(id uint) (*model.Invetation, error) {
+	var invetation *model.Invetation
+	result := db.DB.Find(&invetation, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	log.Tracef("Retrieved: %v", invetation)
+	return invetation, nil
+}
+
+func AcceptInvetation(invetationid uint) (*model.Invetation, *model.Event, error) {
+	
+	//Update Invetation and make accepted true
+	existingInvetation, err := GetInvetationById(invetationid)
+	if existingInvetation == nil || err != nil {
+		log.Error("This User do not have a Invetation")
+		return existingInvetation,nil,  err
+	}
+	existingInvetation.Accepted = true
+	result := db.DB.Save(existingInvetation)
+	if result.Error != nil {
+		return nil, nil, result.Error
+	}
+	entry := log.WithField("ID", invetationid)
+	entry.Info("Successfully updated invetation.")
+	entry.Tracef("Updated: %v", existingInvetation)
+	
+	//Add Participant to Event
+	user, err := GetUserById(existingInvetation.UserID)
+	if err != nil {
+		log.Error("This User do not have a Invetation")
+		return nil, nil, result.Error
+	}
+	event, err := AddParticipants(existingInvetation.EventID, user)
+	if err != nil {
+		log.Error("Error trying to add Participant")
+		return nil, nil, result.Error
+	}
+	return existingInvetation,event, nil
+	
+
+}

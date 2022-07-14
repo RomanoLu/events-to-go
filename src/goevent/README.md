@@ -6,3 +6,7 @@ Jeder Nutzer kann sowohl Veranstalter als auch Teilnehmer sein. Ein Veranstalter
 
 
 Im Outlook speichern
+
+# Google Calender API
+go get -u google.golang.org/api/calendar/v3
+go get -u golang.org/x/oauth2/google
