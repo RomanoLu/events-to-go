@@ -53,25 +53,6 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request){
 	}
 	sendJson(w, user)
 }
-func GetInvetations(w http.ResponseWriter, r *http.Request) {
-	id, err := getId(r)
-	log.Trace("Die id ist: %v", id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	user, err := service.GetUserById(id)
-	if err != nil {
-		log.Errorf("Failure retrieving user with ID %v: %v", id, err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if user == nil {
-		http.Error(w, "404 user not found", http.StatusNotFound)
-		return
-	}
-	sendJson(w, user.Invetations)
-}
 
 func getUser(r *http.Request) (*model.User, error) {
 	var user model.User

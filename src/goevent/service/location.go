@@ -15,3 +15,4 @@ func GetLocations() ([]model.Location, error){
 	log.Tracef("Retrieved: %v", locations)
 	return locations, nil
 }
+

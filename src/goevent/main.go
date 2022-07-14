@@ -20,7 +20,7 @@ func main() {
 	router.HandleFunc("/event/{longitude}/{latitude}", handler.GetEventsNearby).Methods("GET")
 	router.HandleFunc("/event/{id}", handler.UpdateEvent).Methods("UPDATE")
 	router.HandleFunc("/event/{id}", handler.DeleteEvent).Methods("DELETE")	
-	router.HandleFunc("/event/invide/{eventid}/{userid}", handler.InvideUser).Methods("POST")
+	router.HandleFunc("/event/invide", handler.CreateInventation).Methods("POST")
 	router.HandleFunc("/location", handler.GetLocations).Methods("GET")
 
 	//User requests	

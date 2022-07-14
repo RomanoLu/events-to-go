@@ -120,15 +120,15 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	sendJson(w, result{Success: "OK"})
 }
-
+/*
 func InvideUser(w http.ResponseWriter, r *http.Request) {
 	_, userid, invetation, _ := getIds(r)
-
+	log.Info("hier die invetation:  %v", invetation)
 	user, _ :=service.CreateInvetation(userid, invetation)
 
 	sendJson(w, user)
 }
-
+*/
 func getEvent(r *http.Request) (*model.Event, error) {
 	var event model.Event
 	err := json.NewDecoder(r.Body).Decode(&event)
