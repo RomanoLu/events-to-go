@@ -36,7 +36,7 @@ func getId(r *http.Request) (uint, error) {
 
 func getEventIdAndUserId(r *http.Request) (uint,uint, error) {
 	vars := mux.Vars(r)
-	eventid, err := strconv.ParseUint(vars["eventid"], 10, 0)
+	eventid, err := strconv.ParseUint(vars["id"], 10, 0)
 	if err != nil {
 		log.Errorf("Can't get ID from request: %v", err)
 		return 0, 0, err

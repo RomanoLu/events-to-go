@@ -4,6 +4,7 @@ import (
 	"math"
 	"time"
 
+	"github.com/RomanoLu/events-to-go/src/goevent/calendarservice"
 	"github.com/RomanoLu/events-to-go/src/goevent/db"
 	"github.com/RomanoLu/events-to-go/src/goevent/model"
 	log "github.com/sirupsen/logrus"
@@ -21,7 +22,7 @@ func CreateEvent(event *model.Event) error {
 
 func GetAllEvents() ([]model.Event, error) {
 	var events []model.Event
-	result := db.DB.Preload("Participants").Preload("LocationID").Find(&events)
+	result := db.DB.Preload("Host").Preload("Participants").Preload("LocationID").Find(&events)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -31,7 +32,7 @@ func GetAllEvents() ([]model.Event, error) {
 
 func GetEventById(id uint) (*model.Event, error) {
 	var event *model.Event
-	result := db.DB.Preload("Participants").Preload("LocationID").Find(&event, id)
+	result := db.DB.Preload("Host").Preload("Participants").Preload("LocationID").Find(&event, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -40,7 +41,7 @@ func GetEventById(id uint) (*model.Event, error) {
 }
 func GetParticipants(id uint) (*model.Event, error){
 	var event *model.Event
-	result := db.DB.Preload("Participants").Preload("LocationID").Find(&event, id)
+	result := db.DB.Preload("Host").Preload("Participants").Preload("LocationID").Find(&event, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -203,4 +204,14 @@ func isWeekend(t time.Time) bool {
         }
     }
     return false
+}
+
+func SaveEventInCalendar(eventid uint)(*model.Event,string, error){
+	event, err := GetEventById(eventid)
+	if err != nil {
+		log.Error(err)
+	}
+
+	s := calendarservice.SaveEventInCalendar(event)
+	return event, s, nil
 }

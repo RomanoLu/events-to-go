@@ -26,9 +26,6 @@ func GetAllUsers() ([]model.User, error) {
 	return users, nil
 }
 
-
-
-
 func GetUserById(id uint) (*model.User, error) {
 	var user *model.User
 	result := db.DB.Find(&user, id)

@@ -196,3 +196,17 @@ func GetNextWeekendEvents(w http.ResponseWriter, _ *http.Request){
 	}
 	sendJson(w, events)
 }
+
+func SaveEventInCalendar(w http.ResponseWriter, r *http.Request){
+	id, err := getId(r)
+	if err!= nil {
+		return
+	}
+	_, s, err := service.SaveEventInCalendar(id)
+	if err != nil {
+		log.Errorf("Failure creating calendar event with ID %v: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	sendJson(w, s)
+}
