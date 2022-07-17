@@ -1,0 +1,491 @@
+{
+	"info": {
+		"_postman_id": "d5bf5fef-5dc5-4ea4-b7b8-7de160e2d13a",
+		"name": "Enterprise Service Development",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16537200"
+	},
+	"item": [
+		{
+			"name": "User Requests",
+			"item": [
+				{
+					"name": "GetUserById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/user/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\" : \"Daniele\",\t\r\n\t\"Email\" :\t\"Daniele@test.de\",\r\n\t\"Passwort\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInvetationByUserID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/user/invetation/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"invetation",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AcceptInvetation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/acceptinvetation/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"acceptinvetation",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetEventNearby",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/event/39/39",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"event",
+								"39",
+								"39"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SaveEventInCalendar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc5Njk5OTN9.RjzGzWsF00H-h2chJ5sQQq00VnPGQ_lQhTTXzUZdqxc",
+								"type": "text"
+							},
+							{
+								"key": "Access",
+								"value": "Luca@mail.com",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/saveEvent/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"saveEvent",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Host Requests",
+			"item": [
+				{
+					"name": "UpdateEvent",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Titel\": \"Fußball\",\r\n    \"Description\": \"Heute Mittag Kicken beim Burgweg\",\r\n    \"Begin\": \"Heute Abend\",\r\n    \"End\": \"Heute Abend\",\r\n    \"MaxNumberOfParticipants\": 12,\r\n    \"Participants\": [\r\n        {\r\n            \"UserID\": 3,\r\n            \"Name\": \"Luca\",\r\n            \"Email\": \"Luca@mail.com\",\r\n            \"Passwort\": \"1234\"\r\n        },\r\n        {\r\n            \"UserID\": 3,\r\n            \"Name\": \"Deniz\",\r\n            \"Email\": \"Deniz@mail.com\",\r\n            \"Passwort\": \"5678\"\r\n        },\r\n        {\r\n            \"UserID\": 3,\r\n            \"Name\": \"Dario\",\r\n            \"Email\": \"Dario@mail.com\",\r\n            \"Passwort\": \"0000\"\r\n        }\r\n    ],\r\n    \"LocationID\": {\r\n        \"LocationID\": 3,\r\n        \"Name\": \"Gymi\",\r\n        \"Postcode\": \"72793\",\r\n        \"City\": \"Pfullinegn\",\r\n        \"Adress\": \"FGS Pfullingen\",\r\n        \"MaxCapacity\": 12,\r\n        \"Latitude\": 39.022123,\r\n        \"Longitude\": 39.022123\r\n    },\r\n    \"Type\": \"OPEN\",\r\n    \"Host\": {\r\n        \"UserID\": 3,\r\n        \"Name\": \"Luca\",\r\n        \"Email\": \"Luca@mail.com\",\r\n        \"Passwort\": \"1234\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/event/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"event",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InvideUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc5MDAzNjB9.GMQ1_n8xxhRLZIRQBeuA8Y3C1d3Ysl2WDaNqf48cfoY",
+								"type": "text"
+							},
+							{
+								"key": "Access",
+								"value": "Dario@mail.com",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\" : \"Hi komm bitte kicken\",\r\n    \"eventid\" : 6,\r\n    \"userid\" : 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/event/invide/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"event",
+								"invide",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteEvent",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc4OTUxNDB9.kQDB0wDlrFw-VeLscT3F_b-q8jxhwMG9DDJFnepnde0",
+								"type": "text"
+							},
+							{
+								"key": "Access",
+								"value": "Luca@mail.com",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/event/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"event",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddEvent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc5NjU3NTJ9.SHUxETBwgoA83QaphTVOMBfx1-Ynbzp9g7JNQdFbBkE",
+								"type": "text"
+							},
+							{
+								"key": "Access",
+								"value": "Luca@mail.com",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"Titel\": \"Kicken\",\r\n        \"Description\": \"Hi Leute, morgen Kicken wir wer will kann kommen\",\r\n        \"Begin\": \"2022-07-17T18:30:43.511Z\",\r\n        \"End\": \"2022-07-17T21:30:43.511Z\",\r\n        \"MaxNumberOfParticipants\": 22,\r\n        \"Participants\": [\r\n           {\r\n            \"Name\": \"Dario\",\r\n            \"Email\": \"Dario@mail.com\",\r\n            \"Passwort\": \"1234\"\r\n           } \r\n        ],\r\n        \"LocationID\": {\r\n            \"Name\": \"Burgwegschule\",\r\n            \"Postcode\": \"72793\",\r\n            \"City\": \"Pfullinegn\",\r\n            \"Adress\": \"FGS Pfullingen\",\r\n            \"MaxCapacity\": 12,\r\n            \"Latitude\": 39.022123,\r\n            \"Longitude\": 39.022123\r\n        },\r\n        \"Type\": \"OPEN\",\r\n        \"Host\": {\r\n            \"Name\": \"Luca\",\r\n            \"Email\": \"Luca@mail.com\",\r\n            \"Passwort\": \"12345\"\r\n        }\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/event",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetAllEvents",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc5MDAzNjB9.GMQ1_n8xxhRLZIRQBeuA8Y3C1d3Ysl2WDaNqf48cfoY",
+						"type": "text"
+					},
+					{
+						"key": "Access",
+						"value": "Dario@mail.com",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8000/event",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEventByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/event/",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"event",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllUsers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetParticipantsOfEvent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/participants/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"participants",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEventOfToday",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/eventsoftoday",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"eventsoftoday"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetEvensOfWeekend",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8000/eventsofweekend",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"eventsofweekend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddUserToEvent",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTc5MDAzNjB9.GMQ1_n8xxhRLZIRQBeuA8Y3C1d3Ysl2WDaNqf48cfoY",
+						"type": "text"
+					},
+					{
+						"key": "Access",
+						"value": "Dario@mail.com",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8000/adduser/6/13",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"adduser",
+						"6",
+						"13"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAuthToken",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Access",
+						"value": "Dario@mail.com",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8000/jwt",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"jwt"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

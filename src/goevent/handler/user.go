@@ -9,7 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	user, err := getUser(r)
 	if err != nil {
@@ -24,7 +23,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	sendJson(w, user)
 }
 
-func GetUserById(w http.ResponseWriter, r *http.Request){
+func GetUserById(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
 	log.Trace("Die id ist: %v", id)
 	if err != nil {
@@ -44,7 +43,38 @@ func GetUserById(w http.ResponseWriter, r *http.Request){
 	sendJson(w, user)
 }
 
-func GetAllUsers(w http.ResponseWriter, r *http.Request){
+func Participate(w http.ResponseWriter, r *http.Request) {
+	id, err := getId(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	event, err := service.GetEventById(id)
+	if err != nil {
+		log.Errorf("Failure retrieving event with ID %v: %v", id, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if event.Type == "OPEN" {
+		user, err := getUser(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		newevent, err := service.AddParticipants(id, user)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		sendJson(w, newevent)
+	} else {
+		log.Error("This is a private event")
+		return
+	}
+}
+
+func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	user, err := service.GetAllUsers()
 	if err != nil {
 		log.Errorf("Error calling service GetAllUsers: %v", err)

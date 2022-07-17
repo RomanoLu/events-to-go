@@ -3,7 +3,6 @@ module github.com/RomanoLu/events-to-go/src/goevent
 go 1.18
 
 require (
-	github.com/harranali/authority v1.1.0
 	github.com/sirupsen/logrus v1.8.1
 	gorm.io/gorm v1.23.1
 )
@@ -16,8 +15,10 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
+	github.com/harranali/authority v1.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/stretchr/testify v1.7.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
 	golang.org/x/text v0.3.7 // indirect
