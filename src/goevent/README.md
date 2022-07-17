@@ -1,18 +1,23 @@
 # Events-to-Go
 
-## Business Backgrond
+## Business Background
 Ein Service zum Erstellen von Events 
 (z.B Fußball spielen am Samstag, Geburtstagsfeier von Tim, Party am Campus, usw.)
 
 Nutzer können entweder als Host eine Veranstaltung anlegen und pflegen oder als Participants nach Veranstaltungen suchen und an ihnen teilnehmen.
-Jedes Event beinhaltet informationen über die Location, die Teilnehmer und den Begin/das Ende der Veranstaltung. 
-Participants können zusätzlich zu den veranstaltungen eingeladen werden und ihnen zusagen.
+Jedes Event beinhaltet Informationen über die Location, die Teilnehmer und den Begin/das Ende der Veranstaltung. 
+Participants können zusätzlich zu den Veranstaltungen eingeladen werden und ihnen zusagen.
 Bei Veranstaltungen welche als OPEN gekennzeichnet sind können Participents zudem auch ohne die Zustimmung des Hosts teilnehmen.
 
-### Google Calender API
-go get -u google.golang.org/api/calendar/v3
-go get -u golang.org/x/oauth2/google
 
+### Google Calender API
+```sh
+go get -u google.golang.org/api/calendar/v3
+```
+
+```sh
+go get -u golang.org/x/oauth2/google
+```
 Anleitung:
 https://developers.google.com/calendar/api/v3/reference/events
 
