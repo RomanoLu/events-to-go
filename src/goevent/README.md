@@ -1,12 +1,36 @@
 # Events-to-Go
+
+## Business Backgrond
 Ein Service zum Erstellen von Events 
-(z.B Fußball spielen am Samstag, Geburtstagsfeier von Tim, Party am Campus, usw.). 
+(z.B Fußball spielen am Samstag, Geburtstagsfeier von Tim, Party am Campus, usw.)
 
-Jeder Nutzer kann sowohl Veranstalter als auch Teilnehmer sein. Ein Veranstalter erstellt ein Event. Ein Event findet an einer Location statt. Ein Veranstalter kann zudem seine eigenen Events updaten und löschen. Teilnehmer können einem Event zusagen. Teilnehmer können jedem Event zusagen welches als OPEN gekennzeichnet ist. Der Veranstalter eines Events kann, wenn es INVETATION_ONLY ist, Inventation erstellen und an User schicken. Ein User kann seine Einladungen danach ansehen und akzeptieren. 
+Nutzer können entweder als Host eine Veranstaltung anlegen und pflegen oder als Participants nach Veranstaltungen suchen und an ihnen teilnehmen.
+Jedes Event beinhaltet informationen über die Location, die Teilnehmer und den Begin/das Ende der Veranstaltung. 
+Participants können zusätzlich zu den veranstaltungen eingeladen werden und ihnen zusagen.
+Bei Veranstaltungen welche als OPEN gekennzeichnet sind können Participents zudem auch ohne die Zustimmung des Hosts teilnehmen.
 
-
-Im Outlook speichern
-
-# Google Calender API
+### Google Calender API
 go get -u google.golang.org/api/calendar/v3
 go get -u golang.org/x/oauth2/google
+
+Anleitung:
+https://developers.google.com/calendar/api/v3/reference/events
+
+Anleitung für einen quickstart
+https://developers.google.com/calendar/api/quickstart/go
+
+### JSON WEB TOKEN (JWT)
+"github.com/dgrijalva/jwt-go"
+
+## Deployment
+1.  Clone the repo
+```sh
+git clone https://github.com/RomanoLu/events-to-go.git
+```
+2. Build and run the Docker container
+```sh
+docker compose up --build
+```
+
+### Request
+You find the exported Postman workspace in die Repo above 

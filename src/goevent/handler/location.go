@@ -9,7 +9,6 @@ import (
 
 
 func GetLocations(w http.ResponseWriter, _ *http.Request)  {
-	log.Info("Methode wird aufgerufen")
 	locations, err := service.GetLocations()
 	if err != nil {
 		log.Errorf("Error calling service GetAllEvents: %v", err)

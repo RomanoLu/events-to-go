@@ -59,7 +59,7 @@ func getInvetation(r *http.Request) (*model.Invetation, error) {
 	var invetation model.Invetation
 	err := json.NewDecoder(r.Body).Decode(&invetation)
 	if err != nil {
-		log.Errorf("Can't serialize request body to event struct: %v", err)
+		log.Errorf("Can't serialize request body to invetation struct: %v", err)
 		return nil, err
 	}
 	return &invetation, nil

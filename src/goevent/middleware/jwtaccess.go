@@ -35,18 +35,17 @@ func CreateJWT(secret string) (string, error) {
 	return tokenStr, nil
 }
 
-func ValidateJWT(next func(w http.ResponseWriter, r* http.Request)) func(http.ResponseWriter, *http.Request) {
+func ValidateJWT(next func(w http.ResponseWriter, r *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//Hier kann einfach überprüft werden ob die UserID von dieser email adresse 
 		m := make(map[string]string)
 		users, err := service.GetAllUsers()
-		if err!= nil {
+		if err != nil {
 			return
 		}
 		for _, u := range users {
 			m[u.Email] = u.Passwort
 		}
-		var secret string  
+		var secret string
 		for key, value := range m {
 			if r.Header["Access"][0] == key {
 				secret = value
@@ -77,15 +76,15 @@ func ValidateJWT(next func(w http.ResponseWriter, r* http.Request)) func(http.Re
 	})
 }
 
-func ValidateHostRole(next func(w http.ResponseWriter, r* http.Request)) func(http.ResponseWriter, *http.Request) {
+func ValidateHostRole(next func(w http.ResponseWriter, r *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//Hier kann einfach überprüft werden ob die UserID von dieser email adresse 
-		var secret string  
+
+		var secret string
 		vars := mux.Vars(r)
 		id, err := strconv.ParseUint(vars["id"], 10, 0)
 		if err != nil {
 			log.Errorf("Can't get ID from request: %v", err)
-			return 
+			return
 		}
 		event, err := service.GetEventById(uint(id))
 		if r.Header["Access"][0] == event.Host.Email {
@@ -99,7 +98,7 @@ func ValidateHostRole(next func(w http.ResponseWriter, r* http.Request)) func(ht
 					}
 					return []byte(secret), nil
 				})
-	
+
 				if err != nil {
 					w.WriteHeader(http.StatusUnauthorized)
 					w.Write([]byte("not authorized: " + err.Error()))
@@ -111,32 +110,29 @@ func ValidateHostRole(next func(w http.ResponseWriter, r* http.Request)) func(ht
 				w.WriteHeader(http.StatusUnauthorized)
 				w.Write([]byte("not authorized"))
 			}
-		
-		
-			}else{
+
+		} else {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("not authorized"))
-		}		
+		}
 	})
 }
 
 func GetJwt(w http.ResponseWriter, r *http.Request) {
 	m := make(map[string]string)
 	users, err := service.GetAllUsers()
-	if err!= nil {
+	if err != nil {
 		return
 	}
 	for _, u := range users {
 		m[u.Email] = u.Passwort
 	}
-	log.Info("Map der User: %v", m)
+
 	//prüfen ob accesss == wie irgeneine email ist,
-	//und wenn ja, dann createJTW mit der userID als Parameter aufrunfen 
+	//und wenn ja, dann createJTW mit der userID als Parameter aufrunfen
 	if r.Header["Access"] != nil {
-		for key, value := range m {  
-			log.Info("Schaue ob %v existiert ", key)
+		for key, value := range m {
 			if r.Header["Access"][0] == key {
-				log.Info("User exists: %v", key)
 				token, err := CreateJWT(value)
 				if err != nil {
 					return
@@ -144,6 +140,6 @@ func GetJwt(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, token)
 			}
 		}
-		
+
 	}
 }

@@ -17,7 +17,7 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := service.CreateEvent(event); err != nil {
-		log.Errorf("Error calling service CreateCampaign: %v", err)
+		log.Errorf("Error calling service CreateEvent: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -36,7 +36,7 @@ func GetAllEvents(w http.ResponseWriter, _ *http.Request) {
 
 func GetEventById(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
-	log.Trace("Die id ist: %v", id)
+	log.Trace("The requested id was: %v", id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -54,7 +54,7 @@ func GetEventById(w http.ResponseWriter, r *http.Request) {
 	sendJson(w, event)
 }
 
-func GetParticipants(w http.ResponseWriter, r *http.Request){
+func GetParticipants(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
 	log.Trace("Die id ist: %v", id)
 	if err != nil {
@@ -67,18 +67,18 @@ func GetParticipants(w http.ResponseWriter, r *http.Request){
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var  user []model.User= participants.Participants 
+	var user []model.User = participants.Participants
 	log.Info("Recieved Participants: %v", user)
 	sendJson(w, user)
 }
-func AddParticipants(w http.ResponseWriter, r *http.Request){
+func AddParticipants(w http.ResponseWriter, r *http.Request) {
 	eventid, userid, err := getEventIdAndUserId(r)
 	log.Trace("Die id ist: %v & %v", eventid, userid)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	
+
 	user, err := service.GetUserById(userid)
 	log.Info("Dieser User sollte hinzugefügt werden: %v", user)
 	event, err := service.AddParticipants(eventid, user)
@@ -122,19 +122,16 @@ func UpdateEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	event, err = service.UpdateEvent(id, event)
 	if err != nil {
-		log.Errorf("Failure updating campaign with ID %v: %v", id, err)
+		log.Errorf("Failure updating event with ID %v: %v", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if event == nil {
-		http.Error(w, "404 campaign not found", http.StatusNotFound)
+		http.Error(w, "404 event not found", http.StatusNotFound)
 		return
 	}
 	sendJson(w, event)
-
-
 }
-
 
 func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
@@ -154,6 +151,7 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	}
 	sendJson(w, result{Success: "OK"})
 }
+
 /*
 func InvideUser(w http.ResponseWriter, r *http.Request) {
 	_, userid, invetation, _ := getIds(r)
@@ -173,7 +171,6 @@ func getEvent(r *http.Request) (*model.Event, error) {
 	return &event, nil
 }
 
-
 func GetEventByDate(w http.ResponseWriter, _ *http.Request) {
 	currentTime := time.Now()
 	events, err := service.GetEventByDate(currentTime)
@@ -185,8 +182,7 @@ func GetEventByDate(w http.ResponseWriter, _ *http.Request) {
 	sendJson(w, events)
 }
 
-
-func GetNextWeekendEvents(w http.ResponseWriter, _ *http.Request){
+func GetNextWeekendEvents(w http.ResponseWriter, _ *http.Request) {
 	currentTime := time.Now()
 	events, err := service.GetNextWeekendEvents(currentTime)
 	if err != nil {
@@ -197,9 +193,9 @@ func GetNextWeekendEvents(w http.ResponseWriter, _ *http.Request){
 	sendJson(w, events)
 }
 
-func SaveEventInCalendar(w http.ResponseWriter, r *http.Request){
+func SaveEventInCalendar(w http.ResponseWriter, r *http.Request) {
 	id, err := getId(r)
-	if err!= nil {
+	if err != nil {
 		return
 	}
 	_, s, err := service.SaveEventInCalendar(id)

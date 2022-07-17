@@ -34,18 +34,14 @@ func main() {
 		router.HandleFunc("/saveEvent/{id}",  handler.SaveEventInCalendar).Methods("POST")
 		
 	//User requests	
-		router.HandleFunc("/user",handler.GetAllUsers).Methods("GET")
+	//Selbst an event teilnehmen
+		router.HandleFunc("/user",middleware.ValidateJWT(handler.GetAllUsers)).Methods("GET")
 		router.HandleFunc("/user",handler.CreateUser).Methods("POST")
-		router.HandleFunc("/user/{id}",handler.GetUserById).Methods("GET")
-		router.HandleFunc("/user/invetation/{id}",handler.GetInvetations).Methods("GET")
-		router.HandleFunc("/acceptinvetation/{id}",handler.AcceptInvetation).Methods("POST")
-		router.HandleFunc("/participants/{id}",handler.GetParticipants).Methods("POST")
+		router.HandleFunc("/user/{id}",middleware.ValidateJWT(handler.GetUserById)).Methods("GET")
+		router.HandleFunc("/user/invetation/{id}",middleware.ValidateJWT(handler.GetInvetations)).Methods("GET")
+		router.HandleFunc("/acceptinvetation/{id}",middleware.ValidateJWT(handler.AcceptInvetation)).Methods("POST")
+		router.HandleFunc("/participants/{id}",middleware.ValidateJWT(handler.GetParticipants)).Methods("POST")
 	
-	//Save Event in Calender
-	
-	//router.HandleFunc("/event/{location}",handler.DeleteEvent).Methods("DELETE")
-	//router.HandleFunc("/event/{Date}",handler.DeleteEvent).Methods("DELETE")
-
 
 	if err := http.ListenAndServe(":8000", router); err != nil {
 		log.Fatal(err)

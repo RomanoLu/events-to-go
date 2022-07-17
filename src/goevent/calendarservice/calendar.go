@@ -71,14 +71,13 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
-func SaveEventInCalendar(e *model.Event) (string){
+func SaveEventInCalendar(e *model.Event) string {
 	ctx := context.Background()
 	b, err := ioutil.ReadFile("credentials.json")
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
 
-	// If modifying these scopes, delete your previously saved token.json.
 	config, err := google.ConfigFromJSON(b, calendar.CalendarScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
@@ -91,24 +90,25 @@ func SaveEventInCalendar(e *model.Event) (string){
 	}
 
 	event := &calendar.Event{
-		Summary: e.Titel,
-		Location: e.LocationID.Name,
+		Summary:     e.Titel,
+		Location:    e.LocationID.Name,
 		Description: e.Description,
 		Start: &calendar.EventDateTime{
-		  DateTime: e.Begin.String(),
-		  TimeZone: "America/Los_Angeles",
+			DateTime: e.Begin.String(),
+			TimeZone: "Europe/Berlin",
 		},
 		End: &calendar.EventDateTime{
-		  DateTime: e.End.String(),
-		  TimeZone: "America/Los_Angeles",
+			DateTime: e.End.String(),
+			TimeZone: "Europe/Berlin",
 		},
-	  }
-	  
-	  calendarId := "romanolu.luca@gmail.com"
-	  event, err = srv.Events.Insert(calendarId, event).Do()
-	  if err != nil {
+	}
+
+	//Hier wird dann die email adresse des Nutzers eingefügt, zwecks demo ist jedoch meine hinterlegt
+	calendarId := "romanolu.luca@gmail.com"
+	event, err = srv.Events.Insert(calendarId, event).Do()
+	if err != nil {
 		log.Fatalf("Unable to create event. %v\n", err)
-	  }
-	  
+	}
+
 	return event.HtmlLink
 }

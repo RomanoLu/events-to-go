@@ -39,7 +39,7 @@ func GetEventById(id uint) (*model.Event, error) {
 	log.Tracef("Retrieved: %v", event)
 	return event, nil
 }
-func GetParticipants(id uint) (*model.Event, error){
+func GetParticipants(id uint) (*model.Event, error) {
 	var event *model.Event
 	result := db.DB.Preload("Host").Preload("Participants").Preload("LocationID").Find(&event, id)
 	if result.Error != nil {
@@ -50,11 +50,18 @@ func GetParticipants(id uint) (*model.Event, error){
 }
 
 func GetEventByLocation(longitude float64, latitude float64) ([]model.Event, error) {
-	events, _ := GetAllEvents()
-	var nearbyEvents []model.Event
+	events, err := GetAllEvents()
+	if err != nil {
+		log.Errorf("Failure retrieving Events")
+		return nil, err
+	}
 
+	var nearbyEvents []model.Event
 	for _, e2 := range events {
 		loc, err := getLocationByEvent(e2)
+		if loc == &e2.LocationID {
+			log.Info("Die Location ist die gleiche also muss man kein unnötigen Db aufruf machen")
+		}
 		if err != nil {
 			log.Errorf("Failure retrieving Location")
 			return nil, err
@@ -76,7 +83,6 @@ func getLocationByEvent(event model.Event) (*model.Location, error) {
 	log.Tracef("Retrieved: %v", event)
 	return location, nil
 }
-
 
 func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
 	existingEvent, err := GetEventById(id)
@@ -146,7 +152,7 @@ func distance(lat1 float64, lng1 float64, lat2 float64, lng2 float64, unit ...st
 	return dist
 }
 
-func AddParticipants(eventid uint, user *model.User)(*model.Event, error) {
+func AddParticipants(eventid uint, user *model.User) (*model.Event, error) {
 	event, err := GetEventById(eventid)
 	if err != nil {
 		log.Error("This User do not have a Invetation")
@@ -160,7 +166,7 @@ func AddParticipants(eventid uint, user *model.User)(*model.Event, error) {
 
 func GetEventByDate(date time.Time) ([]model.Event, error) {
 	var event []model.Event
-	result := db.DB.Preload("Participants").Preload("LocationID").Where("begin BETWEEN ? AND ?", date, date.AddDate(0,0,1)).Find(&event)
+	result := db.DB.Preload("Participants").Preload("LocationID").Where("begin BETWEEN ? AND ?", date, date.AddDate(0, 0, 1)).Find(&event)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -170,13 +176,13 @@ func GetEventByDate(date time.Time) ([]model.Event, error) {
 
 func GetNextWeekendEvents(date time.Time) ([]model.Event, error) {
 	var event []model.Event
-	result := db.DB.Preload("Participants").Preload("LocationID").Where("begin BETWEEN ? AND ?", date, date.AddDate(0,0,7)).Find(&event)
+	result := db.DB.Preload("Participants").Preload("LocationID").Where("begin BETWEEN ? AND ?", date, date.AddDate(0, 0, 7)).Find(&event)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	var weekendevent []model.Event
 	for _, e := range event {
-		if(isWeekend(e.Begin)){
+		if isWeekend(e.Begin) {
 			weekendevent = append(weekendevent, e)
 		}
 	}
@@ -185,28 +191,28 @@ func GetNextWeekendEvents(date time.Time) ([]model.Event, error) {
 }
 
 func isWeekend(t time.Time) bool {
-    t = t.UTC()
-    switch t.Weekday() {
-    case time.Friday:
-        h, _, _ := t.Clock()
-        if h >= 12+10 {
-            return true
-        }
-    case time.Saturday:
-        return true
-    case time.Sunday:
-        h, m, _ := t.Clock()
-        if h < 12+10 {
-            return true
-        }
-        if h == 12+10 && m <= 5 {
-            return true
-        }
-    }
-    return false
+	t = t.UTC()
+	switch t.Weekday() {
+	case time.Friday:
+		h, _, _ := t.Clock()
+		if h >= 12+10 {
+			return true
+		}
+	case time.Saturday:
+		return true
+	case time.Sunday:
+		h, m, _ := t.Clock()
+		if h < 12+10 {
+			return true
+		}
+		if h == 12+10 && m <= 5 {
+			return true
+		}
+	}
+	return false
 }
 
-func SaveEventInCalendar(eventid uint)(*model.Event,string, error){
+func SaveEventInCalendar(eventid uint) (*model.Event, string, error) {
 	event, err := GetEventById(eventid)
 	if err != nil {
 		log.Error(err)
