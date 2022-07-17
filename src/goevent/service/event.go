@@ -158,9 +158,15 @@ func AddParticipants(eventid uint, user *model.User) (*model.Event, error) {
 		log.Error("This User do not have a Invetation")
 		return event, err
 	}
+	
 	event.Participants = append(event.Participants, *user)
 	//log.Info("Das ist das Event zu welchem der Nutzer hinzugefügt wird: %v", event)
-	UpdateEvent(event.ID, event)
+	if event.MaxNumberOfParticipants > uint(len(event.Participants)){
+		UpdateEvent(event.ID, event)
+		return event, nil
+	}else{
+		log.Error("Max number of participants already arrived")
+	}
 	return event, nil
 }
 
