@@ -92,7 +92,7 @@ func UpdateEvent(id uint, event *model.Event) (*model.Event, error) {
 	existingEvent.Begin = event.Begin
 	existingEvent.Description = event.Description
 	existingEvent.End = event.End
-	existingEvent.Titel = "Update geht durch"
+	existingEvent.Titel = event.Titel
 	existingEvent.MaxNumberOfParticipants = event.MaxNumberOfParticipants
 	existingEvent.Participants = append(existingEvent.Participants, event.Participants...)
 	existingEvent.LocationID = event.LocationID
