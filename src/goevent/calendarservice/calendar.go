@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/RomanoLu/events-to-go/src/goevent/model"
 	"golang.org/x/oauth2"
@@ -94,11 +95,11 @@ func SaveEventInCalendar(e *model.Event) string {
 		Location:    e.LocationID.Name,
 		Description: e.Description,
 		Start: &calendar.EventDateTime{
-			DateTime: e.Begin.String(),
+			DateTime: e.Begin.Format(time.RFC3339),
 			TimeZone: "Europe/Berlin",
 		},
 		End: &calendar.EventDateTime{
-			DateTime: e.End.String(),
+			DateTime: e.End.Format(time.RFC3339),
 			TimeZone: "Europe/Berlin",
 		},
 	}
